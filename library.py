@@ -61,7 +61,7 @@ class MappingTransformer(BaseEstimator, TransformerMixin):
   
   def __init__(self, mapping_column, mapping_dict:dict):  
     self.mapping_dict = mapping_dict
-    self.mapping_column = mapping_column  #column to focus on
+    self.mapping_column = mapping_column   #column to focus on
 
   def fit(self, X, y = None):
     print("Warning: MappingTransformer.fit does nothing.")
