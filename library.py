@@ -121,7 +121,7 @@ class TukeyTransformer(BaseEstimator, TransformerMixin):
     outer_low = q1-3*iqr
     outer_high = q3+3*iqr
     inner_low = q1 - 1.5*iqr
-    inner_high = q1 + 1.5*iqr
+    inner_high = q3 + 1.5*iqr
     if self.fence == 'inner':
       X_[self.target_column] = X_[self.target_column].clip(lower=inner_low, upper=inner_high)
     elif self.fence == 'outer':
