@@ -132,3 +132,25 @@ class TukeyTransformer(BaseEstimator, TransformerMixin):
     result = self.transform(X)
     return result
   
+class MinMaxTransformer(BaseEstimator, TransformerMixin):
+  def __init__(self):
+    pass
+  #fill in rest below
+  def fit(self, X, y = None):
+    print("not implemented")
+    return X
+
+  def transform(self, mtx):
+    new_df = mtx.copy()
+    for column in new_df:
+      mi = new_df[column].min()
+      mx = new_df[column].max()
+      denominator = mx - mi
+      new_df[column] -= mi #x - min(x) <- top of function
+      new_df[column] /= denominator
+    return new_df
+
+  def fit_transform(self, X, y = None):
+    result = self.transform(X)
+    return result
+  
