@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
+from sklearn.impute import KNNImputer
+
 
 class DropColumnsTransformer(BaseEstimator, TransformerMixin):
   def __init__(self, column_list, action='drop'):
@@ -154,3 +156,41 @@ class MinMaxTransformer(BaseEstimator, TransformerMixin):
     result = self.transform(X)
     return result
   
+class KNNTransformer(BaseEstimator, TransformerMixin):
+  def __init__(self,n_neighbors=5, weights="uniform", add_indicator=False):
+    self.n_neighbors = n_neighbors
+    self.weights=weights 
+    self.add_indicator=add_indicator
+
+  #fill in rest below
+  def fit(self, X, y = None):
+    print("Warning: KNNTransformer.fit does nothing.")
+    return X
+
+  def transform(self, X):
+    """need to implement"""
+    """
+    X_copy = X.copy()
+    for row in X:
+      diffs=[]
+      for i in range(6,10):
+        temprow = transformed_df.loc[i].to_list()
+        d = sum([(x-y)**2 for x,y in zip(row, temprow)]) ** .5
+        diffs.append((i,d))
+      sdist = sorted(diffs, key=lambda row: (row[1]))
+      knn_row_indices = [x for  x,__ in sdist[:self.n_neighbors]]
+      nan_values = row.isnan()
+      for x in nan_values:
+        the_votes = [transformed_df.loc[i, x] for i in knn_row_indices]
+        married_votes = sum(the_votes)/len(the_votes)
+        X_copy
+      """
+    X_ = X.copy()
+    imputer = KNNImputer(n_neighbors = self.n_neighbors, weights = self.weights, add_indicator = self.add_indicator)  
+    imputed_data = imputer.fit_transform(X_)
+    X_ = pd.DataFrame(imputed_data)
+    return X_
+    
+  def fit_transform(self, X, y = None):
+    result = self.transform(X)
+    return result
