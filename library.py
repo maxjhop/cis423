@@ -8,30 +8,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegressionCV
 model = LogisticRegressionCV(random_state=1, max_iter=5000)
 
-def dataset_setup(feature_table, labels, the_transformer, rs=1234, ts=.2):
-  X_train, X_test, y_train, y_test = train_test_split(feature_table, labels, test_size=ts, shuffle=True,
-                                                      random_state=rs, stratify=labels)
-  X_train_transformed = the_transformer.fit_transform(X_train)
-  X_test_transformed = the_transformer.fit_transform(X_test)
-  x_trained_numpy = X_train_transformed.to_numpy()
-  x_test_numpy = X_test_transformed.to_numpy()
-  y_train_numpy = np.array(y_train)
-  y_test_numpy = np.array(y_test)
-
-  return x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy
-
-def titanic_setup(titanic_table, transformer=titanic_transformer, rs=88, ts=.2):
-  x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy = dataset_setup(titanic_table.drop(columns='Survived'),
-                                                                             titanic_table['Survived'].to_list(),
-                                                                             transformer, rs=rs, ts=ts)
-  return x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy
-
-def customer_setup(customer_table, transformer=customer_transformer, rs=107, ts=.2):
-  x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy = dataset_setup(customer_table.drop(columns='Rating'),
-                                                                             customer_table['Rating'].to_list(),
-                                                                             transformer, rs=rs, ts=ts)
-  return x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy
-
 class DropColumnsTransformer(BaseEstimator, TransformerMixin):
   def __init__(self, column_list, action='drop'):
     assert action in ['keep', 'drop'], f'DropColumnsTransformer action {action} not in ["keep", "drop"]'
@@ -245,3 +221,28 @@ customer_transformer = Pipeline(steps=[
     ('time spent', TukeyTransformer('Time Spent', 'inner')),
     ('minmax', MinMaxTransformer())
     ], verbose=True)
+
+def dataset_setup(feature_table, labels, the_transformer, rs=1234, ts=.2):
+  X_train, X_test, y_train, y_test = train_test_split(feature_table, labels, test_size=ts, shuffle=True,
+                                                      random_state=rs, stratify=labels)
+  X_train_transformed = the_transformer.fit_transform(X_train)
+  X_test_transformed = the_transformer.fit_transform(X_test)
+  x_trained_numpy = X_train_transformed.to_numpy()
+  x_test_numpy = X_test_transformed.to_numpy()
+  y_train_numpy = np.array(y_train)
+  y_test_numpy = np.array(y_test)
+
+  return x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy
+
+def titanic_setup(titanic_table, transformer=titanic_transformer, rs=88, ts=.2):
+  x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy = dataset_setup(titanic_table.drop(columns='Survived'),
+                                                                             titanic_table['Survived'].to_list(),
+                                                                             transformer, rs=rs, ts=ts)
+  return x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy
+
+def customer_setup(customer_table, transformer=customer_transformer, rs=107, ts=.2):
+  x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy = dataset_setup(customer_table.drop(columns='Rating'),
+                                                                             customer_table['Rating'].to_list(),
+                                                                             transformer, rs=rs, ts=ts)
+  return x_trained_numpy, y_train_numpy, x_test_numpy, y_test_numpy
+
