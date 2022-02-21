@@ -219,7 +219,8 @@ customer_transformer = Pipeline(steps=[
     ('level', MappingTransformer('Experience Level', {'low': 0, 'medium': 1, 'high':2})),
     ('gender', MappingTransformer('Gender', {'Male': 0, 'Female': 1})),
     ('time spent', TukeyTransformer('Time Spent', 'inner')),
-    ('minmax', MinMaxTransformer())
+    ('minmax', MinMaxTransformer()),
+    ('imputer', KNNTransformer())
     ], verbose=True)
 
 def dataset_setup(feature_table, labels, the_transformer, rs=1234, ts=.2):
